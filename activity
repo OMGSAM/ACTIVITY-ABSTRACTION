@@ -1,0 +1,116 @@
+from abc import ABCMeta , abstractmethod
+class composition ( metaclass = ABCMeta ) :
+    def _init_(self , produit = 0 , quantite = 0) :
+        self.__produit = produit
+        self.__quantite = quantite
+    
+    @property
+    def produit(self) :
+        return self.__produit
+    
+    @produit.setter
+    def produit(self , value) :
+        self.__produit = value
+    
+    @property
+    def quantite(self) :
+        return self.__quantite
+    
+    @quantite.setter
+    def quantite(self , value) :
+        self.__quantite = value
+    
+# C1 = composition("cerelac" , 5)
+# print(C1.quantite)
+    
+
+class produit(metaclass = ABCMeta) :
+    def _init_(self , nom , code) :
+        self.__nom = nom
+        self.__code = code
+
+    @property
+    def nom (self) :
+        return self.__nom
+
+    # @nom.setter
+    # def nom (self , value) :
+    #     self.__nom = value
+
+    @property
+    def code(self) :
+        return self.__code
+
+    # @code.setter
+    # def code (self , value) :
+    #     self.__code = value 
+
+    @abstractmethod
+    def getPrixHT(self) :
+        pass
+
+class produit_elementaire(produit) :
+    def _init_(self, nom, code , prixAchat):
+        super()._init_(nom, code) 
+        self.__prixAchat = prixAchat
+
+    def _str_(self) :
+        print(f"le nom est : {self.nom} , le code est : {self.code} ")
+
+    def getPrixHT(self):
+        return self.__prixAchat
+    
+# PE1 = produit_elementaire("cerelac" ,1, 5.15)
+# print(PE1._str_()) 
+
+
+
+
+
+
+
+
+class produit_compose(produit) :
+    tauxTVA = 0.18 
+    def _init_(self, nom , code , fraisFabrication , listeConstituants ):
+        super()._init_(nom, code)
+        self.__fraisFabrication = fraisFabrication
+        self.__listeConstituants =  listeConstituants
+
+#         if isinstance(listeConstituants, list):
+#             self.__listeConstituants = listeConstituants
+#         else:
+#             return TabError("La liste des constituants doit être une liste.")
+
+    @property
+    def fraisFabrication(self) :
+        return self.__fraisFabrication
+    
+    @fraisFabrication.setter
+    def fraisFabrication(self , value) :
+        self.__fraisFabrication = value
+
+    
+    @property
+    def listeConstituants(self) :
+        return self.__listeConstituants
+    
+    @listeConstituants.setter
+    def listeConstituants(self , value) :
+        self.__listeConstituants = value
+
+#     def _str_(self):
+#         return f"{self.nom} ({self.code}) - Frais de fabrication: {self._fraisFabrication}, Constituants: {self._listeConstituants}"
+    
+
+    def getPrixHT(self):
+        return self.__fraisFabrication
+
+
+
+PRODUIT_COMPOSE1 = produit_compose("cake" ,"001","20 dh " , "4 oefs = 6 dh , 1L lait = 3.5 dh  , 2 flants rouges = 1dh , 100 g de farine 5dh ")
+
+print(PRODUIT_COMPOSE1.nom)
+print(PRODUIT_COMPOSE1.code)
+print(PRODUIT_COMPOSE1.listeConstituants)
+print(PRODUIT_COMPOSE1.getPrixHT())
